@@ -1,0 +1,2 @@
+qwerty=lordvessel/victory,key to the depths/key
+asdfgh=master key/key,claymore/greatsword

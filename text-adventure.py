@@ -1,4 +1,4 @@
-import random, os
+import random, os, json
 
 class Controller:
 
@@ -20,7 +20,7 @@ class Controller:
             print("Possible actions: move, pick up, inventory")
             playerInput = input("What do you do? ").lower()
             if playerInput == "move":
-                moveLoc = input("Which room do you move to? ").lower()
+                moveLoc = input("Which room do you move to? ")
                 changed = False
                 for i in range(len(self.world.rooms)):
                     if moveLoc == self.world.rooms[i].name:
@@ -46,6 +46,17 @@ class World:
         self.worldName = name
 
     def create_world(self):
+        with open(self.worldName + ".json", "r") as f:
+            world = json.load(f)
+        for dict in world:
+            room = list(dict.values())
+            itemlist = []
+            for i in range(len(room[2])):
+                newItem = Item(room[2][i], room[3][i])
+                itemlist.append(newItem)
+            self.add_room(room[0], room[1], itemlist)
+
+        '''
         with open(self.worldName + " rooms.txt") as f:
           file = f.read().split('\n')
 
@@ -78,29 +89,29 @@ class World:
                     newItemname, newItemtype = itemList[i].split('/')
                     print(newItemname + " " + newItemtype)
                     newItem = Item(newItemname, newItemtype)
-                    for i in range(len(self.rooms)):
-                        if room == self.rooms[i].name:
-                            print(self.rooms[i].name)
+                    for currentRoom in self.rooms:
+                        if room == currentRoom.name:
+                            print(currentRoom.name)
                             #print(newItem)
-                            self.rooms[i].items.append(newItem)
-                            #print(self.rooms[i].items)
-                            #print(self.rooms[i].items[i].name)
+                            currentRoom.items.append(newItem)
+                            print(currentRoom.items)
+                            #print(i.items[i].name)
         f.close()
-                
+        '''
     
-    def add_room(self, r):
-        newRoom = Room(r)
+    def add_room(self, name, exits, items):
+        newRoom = Room(name, exits, items)
         self.rooms.append(newRoom)
 
     def first_room(self):
         return self.rooms[0]
 
 class Room:
-    exits = []
-    items = []
-
-    def __init__(self, roomName):
+    def __init__(self, roomName, addExits = [], addItems = []):
         self.name = roomName
+        self.exits = addExits
+        self.items = addItems
+        print(self.items)
 
     def add_exit(self, room):
         self.exits.append(room)
@@ -139,7 +150,7 @@ class Player:
 
     def pick_up(self, item):
         for i in range(len(self.currentRoom.items)):
-            if item == self.currentRoom.items[i - 1].name:
+            if item == self.currentRoom.items[i - 1].name.lower():
                 self.inventory.append(self.currentRoom.items[i - 1])
                 self.currentRoom.items.pop(i - 1)
                 

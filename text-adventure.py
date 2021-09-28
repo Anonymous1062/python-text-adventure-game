@@ -11,11 +11,14 @@ class Controller:
         firstRoom = self.world.first_room()
         self.player.set_current_room(firstRoom)
         while True:
-            inventorySize = len(self.player.inventory)
+#            inventorySize = len(self.player.inventory)
 #            if self.player.inventory[inventorySize - 1].itemtype == "victory":
 #                print("Well done " + self.player.playername + ", you have achieved a victory.")
 #                break
 #            else:
+            if self.player.check_victory() == 3:
+                print("Well done " + self.player.playername + ", you have beaten the game.")
+                break
             self.player.currentRoom.describe()
             print("Possible actions: move, pick up, inventory")
             playerInput = input("What do you do? ").lower()
@@ -34,7 +37,8 @@ class Controller:
                 itemChoice = input("Which item do you pick up? ").lower()
                 self.player.pick_up(itemChoice)
             elif playerInput == "inventory":
-                self.player.check_inventory()
+                inv = self.player.check_inventory()
+                print("Your inventory: " + ', '.join(inv))
             else:
                 print("This is no valid action")
        
@@ -111,7 +115,6 @@ class Room:
         self.name = roomName
         self.exits = addExits
         self.items = addItems
-        print(self.items)
 
     def add_exit(self, room):
         self.exits.append(room)
@@ -164,7 +167,15 @@ class Player:
         inv = []
         for i in range(len(self.inventory)):
             inv.append(self.inventory[i].name)
-        print("Your inventory: " + ', '.join(inv))
+        return inv
+
+    def check_victory(self):
+        winitems = 0
+        for i in range(len(self.inventory)):
+            if self.inventory[i].itemtype == "victory":
+                winitems += 1
+        print(str(winitems) + " aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+        return winitems
 
 class Item:
     def __init__(self, iname, itype):
@@ -172,6 +183,6 @@ class Item:
         self.itemtype = itype
 
 wn = input("Which world do I load in? ").lower()
-pn = input("Name your player: ").lower()
+pn = input("Name your player: ")
 game = Controller(wn, pn)
 game.play_game()

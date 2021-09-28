@@ -1,2 +1,0 @@
-qwerty=zweihander/greatsword,key to the depths/key
-asdfgh=master key/key,claymore/greatsword

@@ -1,0 +1,44 @@
+[
+    {
+        "name":"Firelink Shrine",
+        "exits":["Undead Burg", "Undead Parish"],
+        "items":[],
+        "itemtypes":[]
+    },
+    {
+        "name":"Undead Burg",
+        "exits":["Firelink Shrine", "Undead Parish", "The Depths"],
+        "items":[],
+        "itemtypes":[]
+    },
+    {
+        "name":"Undead Parish",
+        "exits":["Undead Burg", "Sen's Fortress"],
+        "items":["First Bell of Awakening"],
+        "itemtypes":["victory"]
+    },
+    {
+        "name":"Sen's Fortress",
+        "exits":["Undead Parish", "Anor Londo"],
+        "items":[],
+        "itemtypes":[]
+    },
+    {
+        "name":"Anor Londo",
+        "exits":["Sen's Fortress"],
+        "items":["Lordvessel"],
+        "itemtypes":["victory"]
+    },
+    {
+        "name":"The Depths",
+        "exits":["Undead Burg", "Blighttown"],
+        "items":[],
+        "itemtypes":[]
+    },
+    {
+        "name":"Blighttown",
+        "exits":["The Depths", "Firelink Shrine"],
+        "items":["Second Bell of Awakening"],
+        "itemtypes":["victory"]
+    }
+]

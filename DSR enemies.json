@@ -1,0 +1,12 @@
+[
+    {
+        "name":"Goblin",
+        "ac":15,
+        "tohitbonus":4,
+        "diecount":1,
+        "diesize":6,
+        "diemod":2,
+        "health":"2d6",
+        "rewards":["50xp"]
+    }
+]

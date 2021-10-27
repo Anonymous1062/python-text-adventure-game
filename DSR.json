@@ -2,43 +2,50 @@
     {
         "name":"Firelink Shrine",
         "exits":["Undead Burg", "Undead Parish"],
-        "items":[],
-        "itemtypes":[]
+        "items":["Plate Armour"],
+        "itemtypes":["ac20"],
+        "enemies":[]
     },
     {
         "name":"Undead Burg",
         "exits":["Firelink Shrine", "Undead Parish", "The Depths"],
         "items":[],
-        "itemtypes":[]
+        "itemtypes":[],
+        "enemies":["Goblin", "Goblin"]
     },
     {
         "name":"Undead Parish",
         "exits":["Undead Burg", "Sen's Fortress"],
         "items":["First Bell of Awakening"],
-        "itemtypes":["victory"]
+        "itemtypes":["victory"],
+        "enemies":[]
     },
     {
         "name":"Sen's Fortress",
         "exits":["Undead Parish", "Anor Londo"],
         "items":[],
-        "itemtypes":[]
+        "itemtypes":[],
+        "enemies":[]
     },
     {
         "name":"Anor Londo",
         "exits":["Sen's Fortress"],
         "items":["Lordvessel"],
-        "itemtypes":["victory"]
+        "itemtypes":["victory"],
+        "enemies":[]
     },
     {
         "name":"The Depths",
         "exits":["Undead Burg", "Blighttown"],
         "items":[],
-        "itemtypes":[]
+        "itemtypes":[],
+        "enemies":[]
     },
     {
         "name":"Blighttown",
         "exits":["The Depths", "Firelink Shrine"],
         "items":["Second Bell of Awakening"],
-        "itemtypes":["victory"]
+        "itemtypes":["victory"],
+        "enemies":[]
     }
 ]

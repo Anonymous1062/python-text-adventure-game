@@ -1,4 +1,14 @@
 import random, os, json
+
+#to roll a dice to see if you hit, how much damage you do, or other things. 2d20 + 5 is a = 2, b = 20, c = 5
+#I wouldn't use a global function, but this is just much more efficient considering I use it in multiple functions
+def roll(a, b, c):
+    rolls = c
+    for i in range(a):
+        diceroll = random.randint(0, b)
+        rolls += diceroll
+    return rolls
+
 #this class is used to control the menu and player inputs
 class Controller:
 
@@ -11,7 +21,8 @@ class Controller:
         firstRoom = self.world.first_room()
         self.player.set_current_room(firstRoom)
         while True:
-            if self.player.check_victory() == 3: #checks if 3 items with itemtype 'victory' are in inventory
+            #checks if 3 items with itemtype 'victory' are in inventory
+            if self.player.check_victory() == 3:
                 print("Well done " + self.player.playername + ", you have beaten the game.")
                 break
             self.player.currentRoom.describe()
@@ -22,24 +33,30 @@ class Controller:
                 changed = False
                 for i in range(len(self.world.rooms)):
                     if moveLoc == self.world.rooms[i].name:
-                        moveTo = self.world.rooms[i] #so you'll move to a room, instead of a string with the same name as the room
+                        #so you'll move to a room, instead of a string with the same name as the room
+                        moveTo = self.world.rooms[i]
                         changed = True
+                os.system("cls")
                 if changed == True:
                     self.player.goto_room(moveTo)
                 else:
-                    print("Room not found")
+                    print("Room not found\n")
             elif playerInput == "pick up":
                 itemChoice = input("Which item do you pick up? ").lower()
+                os.system("cls")
                 self.player.pick_up(itemChoice)
             elif playerInput == "inventory":
                 inv = self.player.check_inventory()
-                print("Your inventory: " + ', '.join(inv))
+                os.system("cls")
+                print("Your inventory: " + ', '.join(inv) + "\n")
             elif playerInput == "equip":
                 itemChoice = input("Which item do you want to equip? ").lower()
+                os.system("cls")
                 self.player.equip_item(itemChoice)
             else:
-                print("This is no valid action")
-       
+                os.system("cls")
+                print("This is no valid action\n")
+
 #this class basically makes and then stores all existing rooms
 class World:
     rooms = []
@@ -50,16 +67,27 @@ class World:
     def create_world(self):
         with open(self.worldName + ".json", "r") as f:
             world = json.load(f)
-        for dict in world:
-            room = list(dict.values()) #takes the values only from the dictionaries, since the rest is for readability in the json file
+        with open(self.worldName + " enemies.json", r) as f:
+            enemies = json.load(f)
+        for roomdict in world:
+            #takes the values only from the dictionaries, since the rest is for readability in the json file
+            room = list(roomdict.values())
             itemlist = []
-            for i in range(len(room[2])): #turns the item and itemtype from the json into objects of the class Item
+            enemylist = []
+            #turns the item and itemtype from the json into objects of the class Item
+            for i in range(len(room[2])):
                 newItem = Item(room[2][i], room[3][i])
                 itemlist.append(newItem)
-            self.add_room(room[0], room[1], itemlist)
+            for i in range(len(room[4])):
+                for enemydict in enemies:
+                    enemy = list(enemydict.values())
+                    if enemy[0] == room[4][i]:
+                        newEnemy = Enemy(enemy[0], enemy[1], enemy[2], enemy[3], enemy[4], enemy[5], enemy[6], enemy[7])
+                        enemylist.append(newEnemy)
+            self.add_room(room[0], room[1], itemlist, enemylist)
 
-    def add_room(self, name, exits, items):
-        newRoom = Room(name, exits, items)
+    def add_room(self, name, exits, items, enemies):
+        newRoom = Room(name, exits, items, enemies)
         self.rooms.append(newRoom)
 
     def first_room(self):
@@ -67,10 +95,11 @@ class World:
 
 #this class has all the details about 1 specific room, and allows you to modify it if needed
 class Room:
-    def __init__(self, roomName, addExits = [], addItems = []):
+    def __init__(self, roomName, addExits, addItems, addEnemies):
         self.name = roomName
         self.exits = addExits
         self.items = addItems
+        self.enemies = addEnemies
 
     def add_exit(self, room):
         self.exits.append(room)
@@ -83,7 +112,8 @@ class Room:
         print("You are in " + self.name)
         print("From this room, you can go to: " + ', '.join(self.exits))
         itemNames = []
-        for i in range(len(self.items)): #because items are objects of the class Item, you have to make a list with just the names for join
+        #because items are objects of the class Item, you have to make a list with just the names for join
+        for i in range(len(self.items)):
             currentItem = self.items[i]
             itemNames.append(currentItem.name)
         print("These items are in this room: " + ', '.join(itemNames))
@@ -93,25 +123,42 @@ class Room:
 class Player:
     inventory = []
     level = 1
-    strength = 10
-    dexterity = 10
-    constitution = 10
-    intelligence = 10
-    faith = 10
+    strength = 0
+    dexterity = 0
+    constitution = 0
+    intelligence = 0
+    faith = 0
     currency = 0
+    hitbonus = "strength"
+    diecount = 1
+    diesize = 1
 
     def __init__(self, name, hp = 10, ac = 10):
         self.playername = name
         self.armourclass = ac
         self.maxHP = hp
         self.currentHP = hp
-    
-    
+
+    def attack(self):
+        balancingdivider = 1 #if too easy, to decrease dmg
+        if self.hitbonus == "strength":
+            tohit = roll(1, 20, (self.strength / balancingdivider) + 2)
+            damage = roll(self.diecount, self.diesize, (self.strength / balancingdivider))
+        elif self.hitbonus == "dexterity":
+            tohit = roll(1, 20, (self.dexterity / balancingdivider) + 2)
+            damage = roll(self.diecount, self.diesize, (self.dexterity / balancingdivider))
+        return tohit, damage
+
+    def get_hit(self, damage):
+        self.currentHP -= damage
+        if self.currentHP < 0:
+            return "game over"
+
     def goto_room(self, room):
         if room.name in self.currentRoom.exits:
             self.currentRoom = room
         else:
-            print("Room not available from here")
+            print("Room not available from here\n")
 
     def set_current_room(self, room):
         self.currentRoom = room
@@ -120,20 +167,26 @@ class Player:
         return self.currentRoom
 
     def pick_up(self, item):
+        found = False
         for i in range(len(self.currentRoom.items)): #loop through items in the room
             if item == self.currentRoom.items[i - 1].name.lower(): #if item asked to pick up is in the room
                 self.inventory.append(self.currentRoom.items[i - 1]) #add item to inventory
                 self.currentRoom.items.pop(i - 1) #remove item from room
-                
+                found = True
+        if found == False:
+            print("Item not found in this room\n")
+
     def check_inventory(self):
         inv = []
-        for i in range(len(self.inventory)): #puts the names of the items in the inventory in inv, to make it easier to print
+        #puts the names of the items in the inventory in inv, to make it easier to print
+        for i in range(len(self.inventory)):
             inv.append(self.inventory[i].name)
         return inv
 
     def check_victory(self):
         winitems = 0
-        for i in range(len(self.inventory)): #loops through the inventory to see if you have enough type 'victory' items
+        #loops through the inventory to see if you have enough type 'victory' items
+        for i in range(len(self.inventory)):
             if self.inventory[i].itemtype == "victory":
                 winitems += 1
         return winitems
@@ -145,7 +198,7 @@ class Player:
                     print(self.inventory[i - 1].itemtype[2:4])
                     self.armourclass = self.inventory[i - 1].itemtype[2:4] #change armourclass to the one specified
                     print(self.armourclass)
-    
+
     def level_up(self, added):
         if added == "strength":
             self.strength += 1
@@ -169,7 +222,42 @@ class Player:
             self.currency -= 1
         else:
             print("Stat to level up not found")
-    
+
+class Enemy:
+    death = False
+
+    def __init__(self, enemyname, armourclass, tohit, diecount, hitdie, extradmg, hitpoints, rewards):
+        self.name = enemyname
+        self.ac = armourclass
+        self.hitbonus = tohit
+        self.diecount = diecount
+        self.diesize = hitdie
+        self.damagebonus = extradmg
+        if isinstance(hitpoints, str):
+            if '+' in hitpoints:
+                dice = hitpoints.split('+')
+                plusnr = numbers[1]
+            else:
+                dice = hitpoints
+                plusnr = 0
+            dice = dice.split('d')
+            self.hp = roll(dice[0], dice[1], plusnr)
+        else:
+            self.hp = hitpoints
+        self.rewards = rewards
+
+    def attack(self, playerac):
+        tohitroll = roll(1, 20, self.hitbonus)
+        if tohitroll > playerac:
+            damageroll = roll(self.diecount, self.diesize, self.damagebonus)
+            return damageroll
+
+    def defend(self, playertohit, playerdamage):
+        if playertohit > self.ac:
+            self.hp - playerdamage
+            if self.hp < 0:
+                self.death = True
+            return self.death
 
 
 #very simple class which stores information about an item
@@ -178,8 +266,11 @@ class Item:
         self.name = iname
         self.itemtype = itype
 
-wn = input("Which world do I load in? ").lower()
-pn = input("Name your player: ")
+#wn = input("Which world do I load in? ").lower()
+wn = "dsr"
+#pn = input("Name your player: ")
+pn = "John Darksoul"
+os.system("cls")
 game = Controller(wn, pn)
 game.play_game()
 

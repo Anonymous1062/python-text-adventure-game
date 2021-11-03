@@ -3,10 +3,12 @@ import random, os, json
 #to roll a dice to see if you hit, how much damage you do, or other things. 2d20 + 5 is a = 2, b = 20, c = 5
 #I wouldn't use a global function, but this is just much more efficient considering I use it in multiple functions
 def roll(a, b, c):
+    print(str(a) + "d" + str(b) + " + " + str(c))
     rolls = c
     for i in range(a):
-        diceroll = random.randint(0, b)
+        diceroll = random.randint(1, b)
         rolls += diceroll
+        print("rolls: " + str(rolls))
     return int(rolls)
 
 #this class is used to control the menu and player inputs
@@ -40,7 +42,9 @@ class Controller:
                 if changed == True:
                     self.player.goto_room(moveTo)
                     if len(self.player.currentRoom.enemies) != 0:
-                        self.combat()
+                        death = self.combat()
+                        if death:
+                            break
                 else:
                     print("Room not found\n")
             elif playerInput == "pick up":
@@ -60,23 +64,32 @@ class Controller:
                 print("This is no valid action\n")
 
     def combat(self):
+        combatrewards = []
         print("Combat has been initiated.")
         enemycount = len(self.player.currentRoom.enemies)
-        for i in range(enemycount):
-            print("Enemy " + str(i + 1) + ": " + self.player.currentRoom.enemies[i].name)
-        selectedEnemy = int(input("Give the number of the enemy you want to attack: "))
-        if selectedEnemy <= enemycount:
-            playerhit, playerdmg = self.player.attack()
-            enemystatus = self.player.currentRoom.enemies[selectedEnemy - 1].defend(playerhit, playerdmg)
-            print(enemystatus)
-            if enemystatus:
-                self.player.currentRoom.enemies.pop(selectedEnemy - 1)
-        for i in range(enemycount):
-            print("Enemy " + str(i + 1) + " attacks...")
-            enemydamage = self.player.currentRoom.enemies[i].attack(self.player.armourclass)
-            if enemydamage > 0:
-                self.player.currentHP -= enemydamage
-                print("You currently have " + str(self.player.currentHP) + "/" + str(self.player.maxHP) + " HP")
+        while enemycount > 0:
+            for i in range(enemycount):
+                print("Enemy " + str(i + 1) + ": " + self.player.currentRoom.enemies[i].name)
+            selectedEnemy = int(input("Give the number of the enemy you want to attack: "))
+            if selectedEnemy <= enemycount:
+                playerhit, playerdmg = self.player.attack()
+                enemystatus = self.player.currentRoom.enemies[selectedEnemy - 1].defend(playerhit, playerdmg)
+                if enemystatus:
+                    combatrewards += self.player.currentRoom.enemies[selectedEnemy - 1].rewards
+                    self.player.currentRoom.enemies.pop(selectedEnemy - 1)
+                    enemycount -= 1
+            for i in range(enemycount):
+                print("Enemy " + str(i + 1) + " attacks...")
+                enemydamage = self.player.currentRoom.enemies[i].attack(self.player.armourclass)
+                if enemydamage > 0:
+                    self.player.currentHP -= enemydamage
+                    print("You currently have " + str(self.player.currentHP) + "/" + str(self.player.maxHP) + " HP")
+                    if self.player.currentHP <= 0:
+                        print("YOU DIED")
+                        return True
+        for i in range(len(combatrewards)):
+            if combatrewards[i][:2] == "xp":
+                self.player.playerstats.exp += int(combatrewards[i][2:])
 
 #this class basically makes and then stores all existing rooms
 class World:
@@ -133,12 +146,56 @@ class Room:
         print("These items are in this room: " + ', '.join(itemNames))
         print("\n")
 
+class Stats:
+    level = 1
+    exp = 0
+    neededexp = 300
+    strength = 0
+    dexterity = 0
+    constitution = 0
+    intelligence = 0
+    wisdom = 0
+    charisma = 0
+
+    def level_up(self, choice):
+        if exp >= neededexp:
+            if choice == "strength":
+                self.strength += 1
+                self.level += 1
+                self.neededexp = self.neededexp * 3
+            elif choice == "dexterity":
+                self.dexterity += 1
+                self.level += 1
+                self.neededexp = self.neededexp * 3
+            elif choice == "constitution":
+                self.constitution += 1
+                self.level += 1
+                self.neededexp = self.neededexp * 3
+            elif choice == "intelligence":
+                self.intelligence += 1
+                self.level += 1
+                self.neededexp = self.neededexp * 3
+            elif choice == "wisdom":
+                self.wisdom += 1
+                self.level += 1
+                self.neededexp = self.neededexp * 3
+            elif choice == "charisma":
+                self.charisma += 1
+                self.level += 1
+                self.neededexp = self.neededexp * 3
+            else:
+                print("Impossible to level " + choice + " due to it not existing.")
+        else:
+            print("Impossible to level " + choice + " due to not having enough exp.")
+
+
 #this class knows everything about the player character, and can modify it all as well
 class Player:
     inventory = []
     hitbonus = "strength"
     diecount = 1
     diesize = 1
+    playerstats = Stats()
 
     def __init__(self, name, hp = 10, ac = 10):
         self.playername = name
@@ -149,11 +206,11 @@ class Player:
     def attack(self):
         balancingdivider = 1 #if too easy, to decrease dmg
         if self.hitbonus == "strength":
-            tohit = roll(1, 20, (self.strength / balancingdivider) + 2)
-            damage = roll(self.diecount, self.diesize, (self.strength / balancingdivider))
+            tohit = roll(1, 20, ((self.playerstats.strength / balancingdivider) + 2))
+            damage = roll(self.diecount, self.diesize, (self.playerstats.strength / balancingdivider))
         elif self.hitbonus == "dexterity":
-            tohit = roll(1, 20, (self.dexterity / balancingdivider) + 2)
-            damage = roll(self.diecount, self.diesize, (self.dexterity / balancingdivider))
+            tohit = roll(1, 20, ((self.playerstats.dexterity / balancingdivider) + 2))
+            damage = roll(self.diecount, self.diesize, (self.playerstats.dexterity / balancingdivider))
         return tohit, damage
 
     def get_hit(self, damage):
@@ -207,50 +264,6 @@ class Player:
                     self.diesize = self.inventory[i - 1].hitdie
                     self.diecount = self.inventory[i - 1].diecount
 
-
-class Stats:
-    level = 1
-    exp = 0
-    neededexp = 300
-    strength = 0
-    dexterity = 0
-    constitution = 0
-    intelligence = 0
-    wisdom = 0
-    charisma = 0
-
-    def level_up(self, choice):
-        if exp => neededexp:
-            if choice == "strength":
-                self.strength += 1
-                self.level += 1
-                self.neededexp = self.neededexp * 3
-            elif choice == "dexterity":
-                self.dexterity += 1
-                self.level += 1
-                self.neededexp = self.neededexp * 3
-            elif choice == "constitution":
-                self.constitution += 1
-                self.level += 1
-                self.neededexp = self.neededexp * 3
-            elif choice == "intelligence":
-                self.intelligence += 1
-                self.level += 1
-                self.neededexp = self.neededexp * 3
-            elif choice == "wisdom":
-                self.wisdom += 1
-                self.level += 1
-                self.neededexp = self.neededexp * 3
-            elif choice == "charisma":
-                self.charisma += 1
-                self.level += 1
-                self.neededexp = self.neededexp * 3
-            else:
-                print("Impossible to level " + choice + " due to it not existing.")
-        else:
-            print("Impossible to level " + choice + " due to not having enough exp.")
-
-
 class Enemy:
     death = False
 
@@ -284,8 +297,7 @@ class Enemy:
 
     def defend(self, playertohit, playerdamage):
         if playertohit > self.ac:
-            self.hp - playerdamage
-            print(self.hp)
+            self.hp -= playerdamage
             print("Hit! You did " + str(playerdamage) + " damage!")
             if self.hp <= 0:
                 self.death = True
@@ -305,7 +317,7 @@ class Item:
             dice = itype.split('d')
             self.diecount = int(dice[0])
             self.hitdie = int(dice[1])
-        elif iname[:3] = "key":
+        elif iname[:3] == "key":
             self.itemname = "key"
             self.location = iname[3:]
         else:
@@ -318,47 +330,3 @@ pn = "John Darksoul"
 os.system("cls")
 game = Controller(wn, pn)
 game.play_game()
-
-
-'''
-with open(self.worldName + " rooms.txt") as f:
-    file = f.read().split('\n')
-
-for content in file:
-    if not content == '':
-        roomName, newexits = content.split("=")
-        #print(roomName)
-        newExit = newexits.split(',')
-        #print(newExit)
-        newRoom = Room(roomName)
-        newRoom.exits = [] #for some reason it retains the exits from the last iteration of the for loop without this
-        #print(newRoom)
-        #print(newRoom.name)
-        #print(newRoom.exits)
-        for i in range(len(newExit)):
-            newRoom.add_exit(newExit[i - 1])
-            #print(newExit[i - 1])
-        #print(newRoom.exits)
-        self.rooms.append(newRoom)
-f.close()
-
-with open(self.worldName + " items.txt") as f:
-    file = f.read().split('\n')
-
-for content in file:
-    if not content == '':
-        room, newItems = content.split("=")
-        itemList = newItems.split(',')
-        for i in range(len(itemList)):
-            newItemname, newItemtype = itemList[i].split('/')
-            print(newItemname + " " + newItemtype)
-            newItem = Item(newItemname, newItemtype)
-            for currentRoom in self.rooms:
-                if room == currentRoom.name:
-                    print(currentRoom.name)
-                    #print(newItem)
-                    currentRoom.items.append(newItem)
-                    print(currentRoom.items)
-                    #print(i.items[i].name)
-f.close()
-'''

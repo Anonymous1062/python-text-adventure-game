@@ -1,5 +1,35 @@
 [
     {
+        "name":"Bandit",
+        "ac":12,
+        "tohitbonus":3,
+        "diecount":1,
+        "diesize":6,
+        "diemod":1,
+        "health":"2d8+2",
+        "rewards":["xp25"]
+    },
+    {
+        "name":"Kobold",
+        "ac":12,
+        "tohitbonus":4,
+        "diecount":1,
+        "diesize":4,
+        "diemod":2,
+        "health":"2d4",
+        "rewards":["xp25"]
+    },
+    {
+        "name":"Skeleton",
+        "ac":13,
+        "tohitbonus":4,
+        "diecount":1,
+        "diesize":6,
+        "diemod":2,
+        "health":"2d8+4",
+        "rewards":["xp50"]
+    },
+    {
         "name":"Goblin",
         "ac":15,
         "tohitbonus":4,
@@ -7,6 +37,86 @@
         "diesize":6,
         "diemod":2,
         "health":"2d6",
-        "rewards":["50xp"]
+        "rewards":["xp50"]
+    },
+    {
+        "name":"Orc",
+        "ac":13,
+        "tohitbonus":5,
+        "diecount":1,
+        "diesize":12,
+        "diemod":3,
+        "health":"2d8+6",
+        "rewards":["xp100"]
+    },
+    {
+        "name":"Hobgoblin",
+        "ac":18,
+        "tohitbonus":3,
+        "diecount":1,
+        "diesize":8,
+        "diemod":1,
+        "health":"2d8+2",
+        "rewards":["xp100"]
+    },
+    {
+        "name":"Bugbear",
+        "ac":16,
+        "tohitbonus":4,
+        "diecount":2,
+        "diesize":8,
+        "diemod":2,
+        "health":"5d8+5",
+        "rewards":["xp200"]
+    },
+    {
+        "name":"Dryad",
+        "ac":16,
+        "tohitbonus":6,
+        "diecount":1,
+        "diesize":8,
+        "diemod":4,
+        "health":"5d8",
+        "rewards":["xp200"]
+    },
+    {
+        "name":"Mimic",
+        "ac":12,
+        "tohitbonus":5,
+        "diecount":2,
+        "diesize":8,
+        "diemod":3,
+        "health":"9d8+18",
+        "rewards":["xp450"]
+    },
+    {
+        "name":"Ogre",
+        "ac":11,
+        "tohitbonus":6,
+        "diecount":2,
+        "diesize":8,
+        "diemod":4,
+        "health":"7d10+21",
+        "rewards":["xp450"]
+    },
+    {
+        "name":"Basilisk",
+        "ac":15,
+        "tohitbonus":5,
+        "diecount":4,
+        "diesize":6,
+        "diemod":3,
+        "health":"8d8+16",
+        "rewards":["xp700"]
+    },
+    {
+        "name":"Minotaur",
+        "ac":14,
+        "tohitbonus":6,
+        "diecount":2,
+        "diesize":12,
+        "diemod":4,
+        "health":"9d10+27",
+        "rewards":["xp700"]
     }
 ]

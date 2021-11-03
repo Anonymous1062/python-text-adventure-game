@@ -7,7 +7,7 @@ def roll(a, b, c):
     for i in range(a):
         diceroll = random.randint(0, b)
         rolls += diceroll
-    return rolls
+    return int(rolls)
 
 #this class is used to control the menu and player inputs
 class Controller:
@@ -39,6 +39,8 @@ class Controller:
                 os.system("cls")
                 if changed == True:
                     self.player.goto_room(moveTo)
+                    if len(self.player.currentRoom.enemies) != 0:
+                        self.combat()
                 else:
                     print("Room not found\n")
             elif playerInput == "pick up":
@@ -57,6 +59,25 @@ class Controller:
                 os.system("cls")
                 print("This is no valid action\n")
 
+    def combat(self):
+        print("Combat has been initiated.")
+        enemycount = len(self.player.currentRoom.enemies)
+        for i in range(enemycount):
+            print("Enemy " + str(i + 1) + ": " + self.player.currentRoom.enemies[i].name)
+        selectedEnemy = int(input("Give the number of the enemy you want to attack: "))
+        if selectedEnemy <= enemycount:
+            playerhit, playerdmg = self.player.attack()
+            enemystatus = self.player.currentRoom.enemies[selectedEnemy - 1].defend(playerhit, playerdmg)
+            print(enemystatus)
+            if enemystatus:
+                self.player.currentRoom.enemies.pop(selectedEnemy - 1)
+        for i in range(enemycount):
+            print("Enemy " + str(i + 1) + " attacks...")
+            enemydamage = self.player.currentRoom.enemies[i].attack(self.player.armourclass)
+            if enemydamage > 0:
+                self.player.currentHP -= enemydamage
+                print("You currently have " + str(self.player.currentHP) + "/" + str(self.player.maxHP) + " HP")
+
 #this class basically makes and then stores all existing rooms
 class World:
     rooms = []
@@ -67,7 +88,7 @@ class World:
     def create_world(self):
         with open(self.worldName + ".json", "r") as f:
             world = json.load(f)
-        with open(self.worldName + " enemies.json", r) as f:
+        with open(self.worldName + " enemies.json", "r") as f:
             enemies = json.load(f)
         for roomdict in world:
             #takes the values only from the dictionaries, since the rest is for readability in the json file
@@ -101,13 +122,6 @@ class Room:
         self.items = addItems
         self.enemies = addEnemies
 
-    def add_exit(self, room):
-        self.exits.append(room)
-
-    def add_item(self, itemname, itemtype):
-        newItem = Item(itemname, itemtype)
-        self.items.append(newItem)
-
     def describe(self):
         print("You are in " + self.name)
         print("From this room, you can go to: " + ', '.join(self.exits))
@@ -122,13 +136,6 @@ class Room:
 #this class knows everything about the player character, and can modify it all as well
 class Player:
     inventory = []
-    level = 1
-    strength = 0
-    dexterity = 0
-    constitution = 0
-    intelligence = 0
-    faith = 0
-    currency = 0
     hitbonus = "strength"
     diecount = 1
     diesize = 1
@@ -194,34 +201,55 @@ class Player:
     def equip_item(self, item):
         for i in range(len(self.inventory)):
             if item == self.inventory[i - 1].name.lower(): #check if you have the item in your inventory
-                if self.inventory[i - 1].itemtype[:2] == "ac": #check if it's armour
-                    print(self.inventory[i - 1].itemtype[2:4])
-                    self.armourclass = self.inventory[i - 1].itemtype[2:4] #change armourclass to the one specified
-                    print(self.armourclass)
+                if self.inventory[i - 1].itemtype == "armour":
+                    self.armourclass = self.inventory[i - 1].armourclass
+                elif self.inventory[i - 1].itemtype == "weapon" :
+                    self.diesize = self.inventory[i - 1].hitdie
+                    self.diecount = self.inventory[i - 1].diecount
 
-    def level_up(self, added):
-        if added == "strength":
-            self.strength += 1
-            self.level += 1
-            self.currency -= 1
-        elif added == "dexterity":
-            self.dexterity += 1
-            self.level += 1
-            self.currency -= 1
-        elif added == "constitution":
-            self.constitution += 1
-            self.level += 1
-            self.currency -= 1
-        elif added == "intelligence":
-            self.intelligence += 1
-            self.level += 1
-            self.currency -= 1
-        elif added == "faith":
-            self.faith += 1
-            self.level += 1
-            self.currency -= 1
+
+class Stats:
+    level = 1
+    exp = 0
+    neededexp = 300
+    strength = 0
+    dexterity = 0
+    constitution = 0
+    intelligence = 0
+    wisdom = 0
+    charisma = 0
+
+    def level_up(self, choice):
+        if exp => neededexp:
+            if choice == "strength":
+                self.strength += 1
+                self.level += 1
+                self.neededexp = self.neededexp * 3
+            elif choice == "dexterity":
+                self.dexterity += 1
+                self.level += 1
+                self.neededexp = self.neededexp * 3
+            elif choice == "constitution":
+                self.constitution += 1
+                self.level += 1
+                self.neededexp = self.neededexp * 3
+            elif choice == "intelligence":
+                self.intelligence += 1
+                self.level += 1
+                self.neededexp = self.neededexp * 3
+            elif choice == "wisdom":
+                self.wisdom += 1
+                self.level += 1
+                self.neededexp = self.neededexp * 3
+            elif choice == "charisma":
+                self.charisma += 1
+                self.level += 1
+                self.neededexp = self.neededexp * 3
+            else:
+                print("Impossible to level " + choice + " due to it not existing.")
         else:
-            print("Stat to level up not found")
+            print("Impossible to level " + choice + " due to not having enough exp.")
+
 
 class Enemy:
     death = False
@@ -241,30 +269,47 @@ class Enemy:
                 dice = hitpoints
                 plusnr = 0
             dice = dice.split('d')
-            self.hp = roll(dice[0], dice[1], plusnr)
+            self.hp = roll(int(dice[0]), int(dice[1]), int(plusnr))
         else:
             self.hp = hitpoints
         self.rewards = rewards
 
     def attack(self, playerac):
         tohitroll = roll(1, 20, self.hitbonus)
+        damageroll = 0
         if tohitroll > playerac:
             damageroll = roll(self.diecount, self.diesize, self.damagebonus)
-            return damageroll
+            print("Hit! You got " + str(damageroll) + " damage!")
+        return damageroll
 
     def defend(self, playertohit, playerdamage):
         if playertohit > self.ac:
             self.hp - playerdamage
-            if self.hp < 0:
+            print(self.hp)
+            print("Hit! You did " + str(playerdamage) + " damage!")
+            if self.hp <= 0:
                 self.death = True
-            return self.death
+                print("This enemy is now dead")
+        return self.death
 
 
 #very simple class which stores information about an item
 class Item:
     def __init__(self, iname, itype):
         self.name = iname
-        self.itemtype = itype
+        if iname[:2] == "ac":
+            self.itemtype = "armour"
+            self.armourclass = int(iname[2:])
+        elif iname[:3] == "wpn":
+            self.itemtype = "weapon"
+            dice = itype.split('d')
+            self.diecount = int(dice[0])
+            self.hitdie = int(dice[1])
+        elif iname[:3] = "key":
+            self.itemname = "key"
+            self.location = iname[3:]
+        else:
+            self.itemtype = itype
 
 #wn = input("Which world do I load in? ").lower()
 wn = "dsr"

@@ -1,4 +1,5 @@
 import random, os, json
+#import controller.py, global.py, world.py, player.py, room.py, stats.py, item.py, enemy.py
 
 #to roll a dice to see if you hit, how much damage you do, or other things. 2d20 + 5 is a = 2, b = 20, c = 5
 #I wouldn't use a global function, but this is just much more efficient considering I use it in multiple functions
@@ -150,12 +151,48 @@ class Stats:
     level = 1
     exp = 0
     neededexp = 300
-    strength = 0
-    dexterity = 0
-    constitution = 0
-    intelligence = 0
-    wisdom = 0
-    charisma = 0
+    strength = 8
+    dexterity = 8
+    constitution = 8
+    intelligence = 8
+    wisdom = 8
+    charisma = 8
+
+    def create_character(self):
+        print("Racial options: Elf, Dwarf, Human")
+        race = input("Which race would you like to be?").lower()
+        if race == "elf":
+            self.dexterity += 2
+            self.wisdom += 2
+            self.intelligence += 1
+        elif race == "dwarf":
+            self.constitution += 2
+            self.strength += 2
+            self.wisdom += 1
+        elif race == "human":
+            self.strength += 1
+            self.dexterity += 1
+            self.constitution += 1
+            self.intelligence += 1
+            self.wisdom += 1
+        while True:
+            print("Divide 27 points among the 6 stats: ")
+            str = int(input("Strength: "))
+            dex = int(input("Dexterity: "))
+            con = int(input("Constitution: "))
+            intel = int(input("Intelligence: "))
+            wis = int(input("Wisdom: "))
+            cha = int(input("Charisma: "))
+            if (str + dex + con + intel + wis + cha) != 27:
+                print("Total does not equal 27")
+            else:
+                self.strength += str
+                self.dexterity += dex
+                self.constitution += con
+                self.intelligence += intel
+                self.wisdom += wis
+                self.charisma += cha
+                break
 
     def level_up(self, choice):
         if exp >= neededexp:
@@ -304,6 +341,28 @@ class Enemy:
                 print("This enemy is now dead")
         return self.death
 
+class Boss(Enemy):
+
+    def __init__(self, enemyname, armourclass, tohit, diecount, hitdie, extradmg, hitpoints, rewards, dialogue, attacknames):
+        Enemy.__init__(self, enemyname, armourclass, tohit, diecount, hitdie, extradmg, hitpoints, rewards)
+        self.dialogue = dialogue
+        self.attacknames = attacknames
+
+    def start_fight(self):
+        print("The door closes behind you, temporarily blocking the way out. Only your own power can save you now...")
+        for i in range(len(self.dialogue)):
+            print(self.dialogue[i])
+
+    def attack(self, playerac):
+        attackcount = len(self.attacknames)
+        selected_attack = random.randint(0, (attackcount - 1))
+        print(self.name + " attacks with " + self.attacknames[selected_attack])
+        tohitroll = roll(1, 20, self.hitbonus[selected_attack])
+        damageroll = 0
+        if tohitroll > playerac:
+            damageroll = roll(self.diecount[selected_attack], self.diesize[selected_attack], self.damagebonus[selected_attack])
+            print("Hit! You got " + str(damageroll) + " damage!")
+        return damageroll
 
 #very simple class which stores information about an item
 class Item:

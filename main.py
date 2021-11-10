@@ -1,6 +1,16 @@
-import random, os, json
-#import controller.py, global.py, world.py, player.py, room.py, stats.py, item.py, enemy.py
+from controller import *
 
+#wn = input("Which world do I load in? ").lower()
+wn = "dsr"
+#pn = input("Name your player: ")
+pn = "John Darksoul"
+os.system("cls")
+game = Controller(wn, pn)
+game.play_game()
+
+
+
+'''
 #to roll a dice to see if you hit, how much damage you do, or other things. 2d20 + 5 is a = 2, b = 20, c = 5
 #I wouldn't use a global function, but this is just much more efficient considering I use it in multiple functions
 def roll(a, b, c):
@@ -297,7 +307,7 @@ class Player:
             if item == self.inventory[i - 1].name.lower(): #check if you have the item in your inventory
                 if self.inventory[i - 1].itemtype == "armour":
                     self.armourclass = self.inventory[i - 1].armourclass
-                elif self.inventory[i - 1].itemtype == "weapon" :
+                elif self.inventory[i - 1].itemtype == "weapon":
                     self.diesize = self.inventory[i - 1].hitdie
                     self.diecount = self.inventory[i - 1].diecount
 
@@ -342,7 +352,6 @@ class Enemy:
         return self.death
 
 class Boss(Enemy):
-
     def __init__(self, enemyname, armourclass, tohit, diecount, hitdie, extradmg, hitpoints, rewards, dialogue, attacknames):
         Enemy.__init__(self, enemyname, armourclass, tohit, diecount, hitdie, extradmg, hitpoints, rewards)
         self.dialogue = dialogue
@@ -368,24 +377,18 @@ class Boss(Enemy):
 class Item:
     def __init__(self, iname, itype):
         self.name = iname
-        if iname[:2] == "ac":
+        if itype[:2] == "ac":
             self.itemtype = "armour"
-            self.armourclass = int(iname[2:])
-        elif iname[:3] == "wpn":
+            self.armourclass = int(itype[2:])
+        elif itype[:3] == "wpn":
             self.itemtype = "weapon"
-            dice = itype.split('d')
+            weapondice = itype[3:]
+            dice = weapondice.split('d')
             self.diecount = int(dice[0])
             self.hitdie = int(dice[1])
-        elif iname[:3] == "key":
+        elif itype[:3] == "key":
             self.itemname = "key"
-            self.location = iname[3:]
+            self.location = itype[3:]
         else:
             self.itemtype = itype
-
-#wn = input("Which world do I load in? ").lower()
-wn = "dsr"
-#pn = input("Name your player: ")
-pn = "John Darksoul"
-os.system("cls")
-game = Controller(wn, pn)
-game.play_game()
+'''

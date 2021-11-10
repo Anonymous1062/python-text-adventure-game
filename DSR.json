@@ -2,8 +2,8 @@
     {
         "name":"Firelink Shrine",
         "exits":["Undead Burg", "Undead Parish"],
-        "items":["Plate Armour"],
-        "itemtypes":["ac20"],
+        "items":["Plain Robes", "Dagger"],
+        "itemtypes":["ac10", "wpn1d4"],
         "enemies":[]
     },
     {

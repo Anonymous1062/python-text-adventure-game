@@ -2,8 +2,8 @@
     {
         "name":"Firelink Shrine",
         "exits":["Undead Burg", "Undead Parish"],
-        "items":["Plain Robes", "Dagger"],
-        "itemtypes":["ac10", "wpn1d4"],
+        "items":["Plain Robes", "Dagger", "Key to the Depths"],
+        "itemtypes":["ac10", "wpn1d4", "key:Firelink Shrine/The Depths"],
         "enemies":[]
     },
     {

@@ -28,7 +28,7 @@ class Stats:
             self.constitution += 1
             self.intelligence += 1
             self.wisdom += 1
-        while True:
+        while (str + dex + con + intel + wis + cha) != 27:
             print("Divide 27 points among the 6 stats: ")
             str = int(input("Strength: "))
             dex = int(input("Dexterity: "))
@@ -37,15 +37,14 @@ class Stats:
             wis = int(input("Wisdom: "))
             cha = int(input("Charisma: "))
             if (str + dex + con + intel + wis + cha) != 27:
+                os.system("cls")
                 print("Total does not equal 27")
-            else:
-                self.strength += str
-                self.dexterity += dex
-                self.constitution += con
-                self.intelligence += intel
-                self.wisdom += wis
-                self.charisma += cha
-                break
+        self.strength += str
+        self.dexterity += dex
+        self.constitution += con
+        self.intelligence += intel
+        self.wisdom += wis
+        self.charisma += cha
 
     def level_up(self, choice):
         if exp >= neededexp:

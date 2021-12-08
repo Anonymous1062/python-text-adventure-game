@@ -13,11 +13,8 @@ class Controller:
         self.world.create_world() #reads from file
         firstRoom = self.world.first_room()
         self.player.set_current_room(firstRoom)
-        while True:
+        while self.player.check_victory() != 3:
             #checks if 3 items with itemtype 'victory' are in inventory
-            if self.player.check_victory() == 3:
-                print("Well done " + self.player.playername + ", you have beaten the game.")
-                break
             self.player.currentRoom.describe()
             print("Possible actions: move, pick up, inventory, equip")
             playerInput = input("What do you do? ").lower()
@@ -42,6 +39,12 @@ class Controller:
                 itemChoice = input("Which item do you pick up? ").lower()
                 os.system("cls")
                 self.player.pick_up(itemChoice)
+                if self.player.inventory[-1].itemtype == "key":
+                    for i in range(len(self.world.rooms)):
+                        if self.world.rooms[i].name == self.player.inventory[-1].entrance:
+                            self.world.rooms[i].exits.append(self.player.inventory[-1].exit)
+                        elif self.world.rooms[i].name == self.player.inventory[-1].exit:
+                            self.world.rooms[i].exits.append(self.player.inventory[-1].entrance)
             elif playerInput == "inventory":
                 inv = self.player.check_inventory()
                 os.system("cls")
@@ -53,6 +56,7 @@ class Controller:
             else:
                 os.system("cls")
                 print("This is no valid action\n")
+        print("Well done " + self.player.playername + ", you have beaten the game.")
 
     def combat(self):
         combatrewards = []

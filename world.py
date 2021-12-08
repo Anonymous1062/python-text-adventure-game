@@ -26,7 +26,15 @@ class World:
                 for enemydict in enemies:
                     enemy = list(enemydict.values())
                     if enemy[0] == room[4][i]:
-                        newEnemy = Enemy(enemy[0], enemy[1], enemy[2], enemy[3], enemy[4], enemy[5], enemy[6], enemy[7])
+                        if '+' in enemy[3]:
+                            dice = enemy[3].split('+')
+                            plusnr = dice[1]
+                            dice = dice[0].split('d')
+                        else:
+                            dice = enemy[3]
+                            plusnr = 0
+                            dice = dice.split('d')
+                        newEnemy = Enemy(enemy[0], enemy[1], enemy[2], dice[0], dice[1], plusnr, enemy[4], enemy[5])
                         enemylist.append(newEnemy)
             self.add_room(room[0], room[1], itemlist, enemylist)
 

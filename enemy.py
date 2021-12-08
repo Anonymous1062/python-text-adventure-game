@@ -14,7 +14,7 @@ class Enemy:
         if isinstance(hitpoints, str):
             if '+' in hitpoints:
                 dice = hitpoints.split('+')
-                plusnr = numbers[1]
+                plusnr = dice[1]
             else:
                 dice = hitpoints
                 plusnr = 0
@@ -50,7 +50,7 @@ class Boss(Enemy):
     def start_fight(self):
         print("The door closes behind you, temporarily blocking the way out. Only your own power can save you now...")
         for i in range(len(self.dialogue)):
-            print(self.dialogue[i])
+            print(self.enemyname + ": " + self.dialogue[i])
 
     def attack(self, playerac):
         attackcount = len(self.attacknames)

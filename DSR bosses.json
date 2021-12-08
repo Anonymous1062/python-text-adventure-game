@@ -1,0 +1,14 @@
+[
+    {
+        "name":"Solaire of Astora",
+        "ac":18,
+        "tohitbonus":[6, 7],
+        "attacknames":["Sunlight Straight Sword", "Sunlight Spear"],
+        "damagedice":["2d8+6", "5d8"],
+        "maxuses":[0, 2],
+        "health":"12d8+36",
+        "rewards":["xp2300"],
+        "dialogue":["Finally, I've found it, I have!", "My very own sun... I am the sun!", "Yes, I did it... I did!"],
+        "death":["Ah, it's over...", "My sun... it's setting...", "It's dark, so dark..."]
+    }
+]

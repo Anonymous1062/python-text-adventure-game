@@ -11,8 +11,11 @@ class Item:
             dice = weapondice.split('d')
             self.diecount = int(dice[0])
             self.hitdie = int(dice[1])
-        elif itype[:3] == "key":
-            self.itemname = "key"
-            self.location = itype[3:]
+        elif itype[:4] == "key:":
+            self.itemtype = "key"
+            door = itype[4:]
+            rooms = door.split('/')
+            self.entrance = rooms[0]
+            self.exit = rooms[1]
         else:
             self.itemtype = itype

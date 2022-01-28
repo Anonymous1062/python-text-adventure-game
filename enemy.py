@@ -12,13 +12,7 @@ class Enemy:
         self.diesize = hitdie
         self.damagebonus = extradmg
         if isinstance(hitpoints, str):
-            if '+' in hitpoints:
-                dice = hitpoints.split('+')
-                plusnr = dice[1]
-            else:
-                dice = hitpoints
-                plusnr = 0
-            dice = dice.split('d')
+            dice, plusnr = split_dice(hitpoints)
             self.hp = roll(int(dice[0]), int(dice[1]), int(plusnr))
         else:
             self.hp = hitpoints
@@ -42,19 +36,33 @@ class Enemy:
         return self.death
 
 class Boss(Enemy):
-    def __init__(self, enemyname, armourclass, tohit, diecount, hitdie, extradmg, hitpoints, rewards, dialogue, attacknames):
-        Enemy.__init__(self, enemyname, armourclass, tohit, diecount, hitdie, extradmg, hitpoints, rewards)
+    def __init__(self, enemyname, armourclass, tohit, attacknames, damagedice, maxuses, hitpoints, rewards, dialogue, deathDialogue):
+        self.diecount = []
+        self.hitdie = []
+        self.extradmg = []
+        for die in damagedice:
+            dice, plusnr = split_dice(die)
+            self.extradmg.append(plusnr)
+            self.diecount.append(dice[0])
+            self.hitdie.append(dice[1])
         self.dialogue = dialogue
         self.attacknames = attacknames
+        self.maxuses = maxuses
+        self.deathlines = deathDialogue
+        Enemy.__init__(self, enemyname, armourclass, tohit, self.diecount, self.hitdie, self.extradmg, hitpoints, rewards)
 
     def start_fight(self):
         print("The door closes behind you, temporarily blocking the way out. Only your own power can save you now...")
-        for i in range(len(self.dialogue)):
-            print(self.enemyname + ": " + self.dialogue[i])
+        for sentence in self.dialogue:
+            print(self.name + ": " + sentence)
 
     def attack(self, playerac):
         attackcount = len(self.attacknames)
-        selected_attack = random.randint(0, (attackcount - 1))
+        while True:
+            selected_attack = random.randint(0, (attackcount - 1))
+            if self.maxuses[selected_attack] != 0:
+                self.maxuses[selected_attack] -= 1
+                break
         print(self.name + " attacks with " + self.attacknames[selected_attack])
         tohitroll = roll(1, 20, self.hitbonus[selected_attack])
         damageroll = 0

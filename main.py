@@ -1,9 +1,9 @@
 from controller import *
 
-#wn = input("Which world do I load in? ").lower()
-wn = "dsr"
-#pn = input("Name your player: ")
-pn = "John Darksoul"
+wn = input("Which world do I load in? ").lower()
+#wn = "dsr" #test world to skip this
+pn = input("Name your player: ")
+#pn = "John Darksoul" #test name to skip this
 os.system("cls")
 game = Controller(wn, pn)
 game.play_game()

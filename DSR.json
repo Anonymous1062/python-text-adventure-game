@@ -4,48 +4,62 @@
         "exits":["Undead Burg", "Undead Parish"],
         "items":["Plain Robes", "Dagger", "Key to the Depths"],
         "itemtypes":["ac10", "wpn1d4", "key:Firelink Shrine/The Depths"],
-        "enemies":[]
+        "enemies":[],
+        "boss":"",
+        "checkpoint":"yes"
     },
     {
         "name":"Undead Burg",
         "exits":["Firelink Shrine", "Undead Parish", "The Depths"],
         "items":[],
         "itemtypes":[],
-        "enemies":["Goblin", "Goblin"]
+        "enemies":["Goblin", "Goblin"],
+        "boss":"",
+        "checkpoint":"no"
     },
     {
         "name":"Undead Parish",
         "exits":["Undead Burg", "Sen's Fortress"],
         "items":["First Bell of Awakening"],
         "itemtypes":["victory"],
-        "enemies":[]
+        "enemies":[],
+        "boss":"Solaire of Astora",
+        "checkpoint":"no"
     },
     {
         "name":"Sen's Fortress",
         "exits":["Undead Parish", "Anor Londo"],
         "items":[],
         "itemtypes":[],
-        "enemies":[]
+        "enemies":[],
+        "boss":"",
+        "checkpoint":"no"
     },
     {
         "name":"Anor Londo",
         "exits":["Sen's Fortress"],
         "items":["Lordvessel"],
         "itemtypes":["victory"],
-        "enemies":[]
+        "enemies":[],
+        "boss":"",
+        "checkpoint":"no"
     },
     {
         "name":"The Depths",
         "exits":["Undead Burg", "Blighttown"],
         "items":[],
         "itemtypes":[],
-        "enemies":[]
+        "enemies":[],
+        "boss":"Solaire of Astora",
+        "checkpoint":"no"
     },
     {
         "name":"Blighttown",
         "exits":["The Depths", "Firelink Shrine"],
         "items":["Second Bell of Awakening"],
         "itemtypes":["victory"],
-        "enemies":[]
+        "enemies":[],
+        "boss":"",
+        "checkpoint":"no"
     }
 ]

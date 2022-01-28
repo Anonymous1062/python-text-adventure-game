@@ -4,12 +4,14 @@ class Stats:
     level = 1
     exp = 0
     neededexp = 300
-    strength = 8
-    dexterity = 8
-    constitution = 8
-    intelligence = 8
-    wisdom = 8
-    charisma = 8
+    strength = 10
+    dexterity = 10
+    constitution = 10
+
+    #unused stats, which also makes character creation unbalanced for now, so they're not used outside of this class.
+    intelligence = 10
+    wisdom = 10
+    charisma = 10
 
     def create_character(self):
         print("Racial options: Elf, Dwarf, Human")
@@ -46,8 +48,9 @@ class Stats:
         self.wisdom += wis
         self.charisma += cha
 
-    def level_up(self, choice):
-        if exp >= neededexp:
+    def level_up(self):
+        if self.exp >= self.neededexp:
+            choice = input("Level up!\n Choose your stat to level up: ").lower()
             if choice == "strength":
                 self.strength += 1
                 self.level += 1
@@ -74,5 +77,3 @@ class Stats:
                 self.neededexp = self.neededexp * 3
             else:
                 print("Impossible to level " + choice + " due to it not existing.")
-        else:
-            print("Impossible to level " + choice + " due to not having enough exp.")

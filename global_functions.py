@@ -7,12 +7,12 @@ def roll(a, b, c):
     a = int(a)
     b = int(b)
     c = int(c)
-    print(str(a) + "d" + str(b) + " + " + str(c))
+    #print(str(a) + "d" + str(b) + " + " + str(c))
     rolls = c
     for i in range(a):
         diceroll = random.randint(1, b)
         rolls += diceroll
-        print("rolls: " + str(rolls))
+        #print("rolls: " + str(rolls))
     return int(rolls)
 
 def split_dice(diceString):

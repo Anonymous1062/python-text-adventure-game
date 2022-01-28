@@ -20,7 +20,8 @@ class Controller:
             print("Possible actions: move, pick up, inventory, equip")
             playerInput = input("What do you do? ").lower()
             if playerInput == "move":
-                self.movePlayer()
+                if self.movePlayer():
+                    break
             elif playerInput == "pick up":
                 self.take_item()
             elif playerInput == "inventory":
@@ -52,14 +53,14 @@ class Controller:
                 if self.player.currentRoom.boss != False:
                     death = self.combat(True)
                     if death:
-                        break
+                        return True
                     for finalWords in self.player.currentRoom.boss.deathlines:
                         print(self.player.currentRoom.boss.name + ": " + finalWords)
                     self.player.currentRoom.boss = False
                 elif len(self.player.currentRoom.enemies) != 0:
                     death = self.combat(False)
                     if death:
-                        break
+                        return True
                 changed = True
         if changed == False:
             print("Room not found\n")

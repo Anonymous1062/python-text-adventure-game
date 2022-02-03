@@ -1,0 +1,38 @@
+[
+    {
+        "name":"Pontiff Gerard",
+        "ac":14,
+        "tohitbonus":[2, 4, 3],
+        "attacknames":["Sir Gerard's Holy Sword", "Sir Gerard's Flaming Sword", "Dual Hit"],
+        "damagedice":["1d6+3", "1d8+3", "2d6+2"],
+        "maxuses":[-1, -1, 2],
+        "health":"4d4+12",
+        "rewards":["xp300"],
+        "dialogue":["You dare challenge the champion of the Lord?", "Very well, show me your skills, I will guard this place with my life!"],
+        "death":["You were a worthy opponent...", "Lord, allow me to join you in your realm!"]
+    },
+    {
+        "name":"Frog of Destruction",
+        "ac":11,
+        "tohitbonus":[3, 6, 3],
+        "attacknames":["Tongue Lash", "Jump", "Poison Shot"],
+        "damagedice":["1d10+1", "1d6+4", "2d8+3"],
+        "maxuses":[-1, -1, 2],
+        "health":"2d10+2",
+        "rewards":["xp450"],
+        "dialogue":[],
+        "death":[]
+    },
+    {
+        "name":"Miner Steve",
+        "ac":15,
+        "tohitbonus":[5, 2, 4],
+        "attacknames":["Diamond Tipped Pickaxe", "Wolf Spirit", "Recurve Bow"],
+        "damagedice":["2d8+3", "4d6+2", "2d6+3"],
+        "maxuses":[-1, 3, -1],
+        "health":"5d8+18",
+        "rewards":["xp600"],
+        "dialogue":["...", "...", "..."],
+        "death":["...", "...", "..."]
+    }
+]

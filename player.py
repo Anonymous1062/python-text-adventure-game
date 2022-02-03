@@ -71,8 +71,8 @@ class Player:
             if item == self.inventory[i - 1].name.lower():
                 if self.inventory[i - 1].itemtype == "armour":
                     self.armourclass = self.inventory[i - 1].armourclass
-                    print("Equipped " + item + "as a piece of armour.\n You now have an armourclass of " + str(self.armourclass))
+                    print("Equipped " + item + " as a piece of armour.\nYou now have an armourclass of " + str(self.inventory[i - 1].armourclass))
                 elif self.inventory[i - 1].itemtype == "weapon":
                     self.diesize = self.inventory[i - 1].hitdie
                     self.diecount = self.inventory[i - 1].diecount
-                    print("Equipped " + item + "as a weapon.\n You now deal " + str(self.diecount) + "d" + str(self.hitdie) + "damage")
+                    print("Equipped " + item + " as a weapon.\nYou now deal " + str(self.inventory[i - 1].diecount) + "d" + str(self.inventory[i - 1].hitdie) + " damage")

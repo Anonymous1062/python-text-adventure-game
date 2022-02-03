@@ -1,0 +1,182 @@
+[
+    {
+        "name":"Forest Entrance",
+        "exits":["Forest Trail"],
+        "items":["Plain Robes", "Rusted Straight Sword", "Cheat Sword", "Cheat Armour"],
+        "itemtypes":["ac10", "wpn1d6", "wpn1000d1", "ac100"],
+        "enemies":[],
+        "boss":"",
+        "checkpoint":"no"
+    },
+    {
+        "name":"Forest Trail",
+        "exits":["Forest Entrance", "Clearing"],
+        "items":[],
+        "itemtypes":[],
+        "enemies":["Bandit", "Bandit"],
+        "boss":"",
+        "checkpoint":"no"
+    },
+    {
+        "name":"Clearing",
+        "exits":["Adventurer's Lodge", "Overgrown Ruins"],
+        "items":[],
+        "itemtypes":[],
+        "enemies":["Bandit"],
+        "boss":"",
+        "checkpoint":"no"
+    },
+    {
+        "name":"Adventurer's Lodge",
+        "exits":["Clearing"],
+        "items":["Shrine Key"],
+        "itemtypes":["key:Forest Shrine/Clearing"],
+        "enemies":[],
+        "boss":"",
+        "checkpoint":"no"
+    },
+    {
+        "name":"Forest Shrine",
+        "exits":["Sacred Altar"],
+        "items":[],
+        "itemtypes":[],
+        "enemies":[],
+        "boss":"Pontiff Gerard",
+        "checkpoint":"no"
+    },
+    {
+        "name":"Sacred Altar",
+        "exits":["Forest Shrine"],
+        "items":["Hexagonal Spell Book"],
+        "itemtypes":["victory"],
+        "enemies":[],
+        "boss":"",
+        "checkpoint":"yes"
+    },
+    {
+        "name":"Overgrown Ruins",
+        "exits":["Clearing", "Campfire"],
+        "items":[],
+        "itemtypes":[],
+        "enemies":["Carnivorous Plant"],
+        "boss":"",
+        "checkpoint":"no"
+    },
+    {
+        "name":"Campfire",
+        "exits":["Sacred Altar", "Frog Trail"],
+        "items":["Footsoldier's Sword", "Leather Chestplate", "Secret Door Instructions"],
+        "itemtypes":["wpn1d8", "ac12", "key:Forest Shrine/Hidden Sanctum"],
+        "enemies":[],
+        "boss":"",
+        "checkpoint":"no"
+    },
+    {
+        "name":"Frog Trail",
+        "exits":["Campfire", "Lake"],
+        "items":[],
+        "itemtypes":[],
+        "enemies":["Swarm of Frogs"],
+        "boss":"",
+        "checkpoint":"no"
+    },
+    {
+        "name":"Lakeside",
+        "exits":["Frog Trail", "Underwater"],
+        "items":["Frog Tongue", "Breathing Gills"],
+        "itemtypes":["wpn1d10", "key:Lakeside/Lake"],
+        "enemies":[],
+        "boss":"Frog of Destruction",
+        "checkpoint":"no"
+    },
+    {
+        "name":"Lake",
+        "exits":["Sunken Village", "Underwater Cave"],
+        "items":[],
+        "itemtypes":[],
+        "enemies":[],
+        "boss":"",
+        "checkpoint":"no"
+    },
+    {
+        "name":"Underwater Cave",
+        "exits":["Lake"],
+        "items":[],
+        "itemtypes":[],
+        "enemies":[],
+        "boss":"",
+        "checkpoint":"yes"
+    },
+    {
+        "name":"Sunken Village",
+        "exits":["Portal"],
+        "items":["Ruined Armory Key"],
+        "itemtypes":["key:Overgrown Ruins/Armory"],
+        "enemies":["Drowner", "Drowner"],
+        "boss":"",
+        "checkpoint":"no"
+    },
+    {
+        "name":"Portal",
+        "exits":["Sunken Village", "Clearing"],
+        "items":["Hexagonal Spell Scroll"],
+        "itemtypes":["victory"],
+        "enemies":["Drowner"],
+        "boss":"",
+        "checkpoint":"no"
+    },
+    {
+        "name":"Hidden Sanctum",
+        "exits":[],
+        "items":["Warrior Priest's Chainmail"],
+        "itemtypes":["ac16"],
+        "enemies":[],
+        "boss":"",
+        "checkpoint":"no"
+    },
+    {
+        "name":"Armory",
+        "exits":[],
+        "items":["Knight's Sword", "Map of the Forest"],
+        "itemtypes":["wpn1d12", "key:Clearing/Old Mine"],
+        "enemies":["Metal Golem"],
+        "boss":"",
+        "checkpoint":"no"
+    },
+    {
+        "name":"Old Mine",
+        "exits":["Mine Entrance"],
+        "items":[],
+        "itemtypes":[],
+        "enemies":["Undead Miner", "Undead Miner"],
+        "boss":"",
+        "checkpoint":"no"
+    },
+    {
+        "name":"Mine Entrance",
+        "exits":["Mineshaft", "Mine Office"],
+        "items":[],
+        "itemtypes":[],
+        "enemies":[],
+        "boss":"",
+        "checkpoint":"no"
+    },
+    {
+        "name":"Mine Office",
+        "exits":[],
+        "items":["Hexagonal Staff"],
+        "itemtypes":["victory"],
+        "enemies":[],
+        "boss":"Miner Steve",
+        "checkpoint":"no"
+    },
+    {
+        "name":"Mineshaft",
+        "exits":["Mine Entrance"],
+        "items":[],
+        "itemtypes":["key:Mine Office/Mine Entrance"],
+        "enemies":["Undead Miner, Undead Miner", "Undead Miner"],
+        "boss":"",
+        "checkpoint":"no"
+    }
+]

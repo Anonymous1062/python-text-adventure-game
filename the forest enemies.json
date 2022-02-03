@@ -1,0 +1,50 @@
+[
+    {
+        "name":"Bandit",
+        "ac":11,
+        "tohitbonus":2,
+        "damagedice":"1d4",
+        "health":"1d6+2",
+        "rewards":["xp25"]
+    },
+    {
+        "name":"Carnivorous Plant",
+        "ac":13,
+        "tohitbonus":4,
+        "damagedice":"1d8+1",
+        "health":"2d4+2",
+        "rewards":["xp50"]
+    },
+    {
+        "name":"Swarm of Frogs",
+        "ac":13,
+        "tohitbonus":5,
+        "damagedice":"2d4+3",
+        "health":"2d6+4",
+        "rewards":["xp100"]
+    },
+    {
+        "name":"Drowner",
+        "ac":12,
+        "tohitbonus":4,
+        "damagedice":"2d4+2",
+        "health":"1d8+1",
+        "rewards":["xp50"]
+    },
+    {
+        "name":"Undead Miner",
+        "ac":14,
+        "tohitbonus":4,
+        "damagedice":"1d8+2",
+        "health":"2d6+6",
+        "rewards":["xp100"]
+    },
+    {
+        "name":"Metal Golem",
+        "ac":17,
+        "tohitbonus":3,
+        "damagedice":"1d8+1",
+        "health":"2d6+4",
+        "rewards":["xp200"]
+    }
+]
